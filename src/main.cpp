@@ -139,9 +139,20 @@ void game()
 
 int main(int argc, char* argv[]) {
 
+	const double DELAY_TIME = 1000 / 240;
+	Uint32 frameStart;
+    int frameTime;
+
 	while(gameRunning) {
 
+		frameStart = SDL_GetTicks();
+
 		game();
+
+		frameTime = SDL_GetTicks() - frameStart;
+        if (frameTime < DELAY_TIME) {
+            SDL_Delay(DELAY_TIME - frameTime);
+        }
 
 	}
 	
