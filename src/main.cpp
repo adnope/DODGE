@@ -1,7 +1,6 @@
 #include "RenderWindow.h"
 #include "Entity.h"
 #include "Player.h"
-#include "Math.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -53,7 +52,6 @@ int main(int argc, char* argv[]) {
 		
 		player.move();
 		window.render(player);
-		std::cout << player.getAngle() << std::endl;
 		
 		window.display();
 
