@@ -1,4 +1,5 @@
 #include "RenderWindow.h"
+
 #include <iostream>
 
 RenderWindow::RenderWindow(const char* title, int _w, int _h) : window(NULL), renderer(NULL)
@@ -25,6 +26,8 @@ void RenderWindow::cleanUp() {
 SDL_Texture* RenderWindow::loadTexture(const char* filePath) {
 
     SDL_Texture* loaded = IMG_LoadTexture(renderer, filePath);
+
+    if(loaded == nullptr) std::cout << "Failed to load Texture!" << SDL_GetError() << std::endl;
 
     return loaded;
 
@@ -57,5 +60,48 @@ void RenderWindow::render(Player player) {
 void RenderWindow::render(SDL_Texture* tex) {
 
     SDL_RenderCopy(renderer, tex, NULL, NULL);
+
+}
+
+// void RenderWindow::render(Projectiles p) {
+
+//     static int count = 0;
+
+//     std::vector<SDL_Rect> clips = p.clips;
+
+//     SDL_Rect destRect;
+
+//     destRect.x = p.getX() - p.getWidth() / 2;
+//     destRect.y = p.getY() - p.getHeight() / 2;
+//     destRect.w = p.getWidth();
+//     destRect.h = p.getHeight();
+
+//     SDL_Rect srcRect = clips[count / 4];
+
+//     SDL_RenderCopyEx(renderer, p.getSprite(), &srcRect, &destRect, p.getAngle(), NULL, SDL_FLIP_NONE);
+
+//     count++;
+//     if(count >= 16) count = 0;
+// }
+
+void RenderWindow::render(Ezreal e, double deltaTime) {
+
+    e.updateClip(deltaTime);
+    int i = e.getCurrentFrame();
+    SDL_Rect srcRect = e.clips[i];
+
+    // static int count = 0;
+    // std::vector<SDL_Rect> clips = e.clips;
+    // SDL_Rect srcRect = clips[count / 250];
+    // count++; if(count >= 1000) count = 0;
+
+    SDL_Rect destRect;
+
+    destRect.x = e.getX() - e.getWidth() / 2;
+    destRect.y = e.getY() - e.getHeight() / 2;
+    destRect.w = e.getWidth();
+    destRect.h = e.getHeight();
+
+    SDL_RenderCopyEx(renderer, e.getSprite(), &srcRect, &destRect, e.getAngle(), NULL, SDL_FLIP_NONE);
 
 }

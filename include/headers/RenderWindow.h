@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Entity.h"
 #include "Player.h"
+#include "Projectiles.h"
+
 #include<SDL.h>
 #include<SDL_image.h>
 
@@ -14,6 +15,7 @@ public:
     void clear();
     void render(Player player);
     void render(SDL_Texture* tex);
+    void render(Ezreal p, double deltaTime);
     void display();
 
 private:

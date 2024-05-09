@@ -1,30 +1,56 @@
 #pragma once
-#include "Entity.h"
+
+#include"RenderWindow.h"
+
 #include<SDL.h>
 #include<SDL_image.h>
+
 #include<cmath>
 #include<iostream>
 
-class Player : public Entity{
+class Player{
 private:
 
-    const int speed = 5;
-    float destX, destY;
+    float angle;
+    float x;
+    float y;
+    SDL_Texture* tex;
+    const float speed = 2.5;
+    float destX;
+    float destY;
+    const int width = 50;
+    const int height = 50;
 
 public:
 
+    Player() {
+        x = 0; y = 0; destX = 0; destY = 0; tex = NULL;
+    }
+
     Player(float _x, float _y, SDL_Texture* _tex) {
 
-        angle = 0;
         destX = _x;
         destY = _y;
-        width = 50;
-        height = 50;
-        x = _x + 25;
-        y = _y + 25;
+
+        x = destX + 25;
+        y = destY + 25;
+
+        angle = 0;
+
         tex = _tex;
 
     }
+
+    SDL_Texture* getTex() { return tex; }
+
+    float getX() const { return x; }
+    float getY() const { return y; }
+    void setPos(float _x, float _y) { x = _x; y = _y; }
+
+    int getWidth() const { return width; }
+    int getHeight() const { return height; }
+
+    float getAngle() const { return angle; }
 
     void takeMouseInput() {
 
@@ -35,28 +61,14 @@ public:
         destX = _x;
         destY = _y;
 
-        float dX = std::abs(destX - x);
-        float dY = std::abs(destY - y);
+        float dX = destX - x;
+        float dY = destY - y;
 
-        if(destX >= x + speed && destY <= y - speed) {
-            angle = atan(dX/dY) * 180 / 3.141592;
-        }
-
-        if(destX >= x + speed && destY >= y + speed) {
-            angle = 180 - ( atan(dX/dY) * 180 / 3.141592 );
-        }
-
-        if(destX <= x - speed && destY >= y + speed) {
-            angle = 180 + ( atan(dX/dY) * 180 / 3.141592 );
-        }
-
-        if(destX <= x - speed && destY <= y - speed) {
-            angle = 360 - atan(dX/dY) * 180 / 3.141592;
-        }
+        angle = atan2(dY, dX) * 180 / 3.141592 + 90;
 
     }
 
-    void move() {
+    void move(double deltaTime) {
 
         float dx = destX - x;
         float dy = destY - y;
@@ -68,14 +80,14 @@ public:
             dy /= distance;
         }
         
-        x += dx * speed;
-        y += dy * speed;
+        x += dx * speed * deltaTime * 100;
+        y += dy * speed * deltaTime * 100;
 
         if (std::abs(x - destX) < speed && std::abs(y - destY) < speed) {
             x = destX;
             y = destY;
         }
-
+        
     }
 
 };
