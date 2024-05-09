@@ -12,12 +12,6 @@ RenderWindow window("DODGE!", 1280, 720);
 SDL_Texture* playerTex = window.loadTexture("res/rocket.png");
 SDL_Texture* ezrealSprite = window.loadTexture("res/ezreal.png");
 SDL_Texture* background = window.loadTexture("res/space_background.png");
-SDL_Rect ezrealClips[4] = {
-	{0, 0, 12, 13},
-	{0, 0, 12, 13},
-	{0, 0, 12, 13},
-	{0, 0, 12, 13}
-};
 
 bool init()
 {
