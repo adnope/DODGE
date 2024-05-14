@@ -12,7 +12,6 @@
 class Player{
 private:
 
-    bool dead;
     SDL_Rect collisionBox;
     float angle;
     float x;
@@ -56,13 +55,14 @@ public:
     int getHeight() const { return height; }
     float getAngle() const { return angle; }
     SDL_Rect getCollisionBox() { return collisionBox; }
-    
-    bool isDead() {
-        return dead;
-    }
 
-    void setDeath(bool b) {
-        dead = b;
+    void setPos(float _x, float _y) {
+
+        x = _x;
+        y = _y;
+        destX = _x;
+        destY = _y;
+
     }
 
     void takeMouseInput() {

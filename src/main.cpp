@@ -31,7 +31,18 @@ RenderWindow window("DODGE!", 1280, 720);
 SDL_Texture* playerTex = window.loadTexture("res/textures/rocket.png");
 SDL_Texture* ezrealSprite = window.loadTexture("res/textures/ezreal.png");
 SDL_Texture* background = window.loadTexture("res/textures/ingame_bg.png");
-SDL_Texture* endScreenBg = window.loadTexture("res/textures/endscreen_bg.png");
+SDL_Texture* endScreenBg = window.loadTexture("res/textures/endscreen2.png");
+SDL_Texture* titleScreenBg = window.loadTexture("res/textures/title_screen_bg.png");
+SDL_Texture* playButton = window.loadTexture("res/textures/Play_Button_Default.png");
+SDL_Texture* playButtonHovered = window.loadTexture("res/textures/Play_Button_Hover.png");
+SDL_Texture* DODGE_TEXT = window.loadTexture("res/textures/DODGE.png");
+SDL_Texture* replayButton = window.loadTexture("res/textures/Pause_Replay_Default.png");
+SDL_Texture* replayButtonHovered = window.loadTexture("res/textures/Pause_Replay_Hover.png");
+SDL_Texture* homeButton = window.loadTexture("res/textures/Pause_Home_Default.png");
+SDL_Texture* homeButtonHovered = window.loadTexture("res/textures/Pause_Home_Hover.png");
+SDL_Texture* pause_playButton = window.loadTexture("res/textures/Pause_Play_Default.png");
+SDL_Texture* pause_playButtonHovered = window.loadTexture("res/textures/Pause_Play_Hover.png");
+
 
 SDL_Color blue = {29, 100, 186};
 SDL_Color green = {46, 125, 50};
@@ -40,15 +51,17 @@ TTF_Font* endScreen90 = TTF_OpenFont("res/fonts/endscreen.ttf", 90);
 TTF_Font* endScreen18 = TTF_OpenFont("res/fonts/endscreen.ttf", 18);
 TTF_Font* endScreen22 = TTF_OpenFont("res/fonts/endscreen.ttf", 22);
 TTF_Font* endScreen44 = TTF_OpenFont("res/fonts/endscreen.ttf", 44);
+TTF_Font* bernhard20 = TTF_OpenFont("res/fonts/bernhard.ttf", 20);
+TTF_Font* bernhard30 = TTF_OpenFont("res/fonts/bernhard.ttf", 30);
 
-int state = 1; //0 = title screen, 1 = game, 2 = end screen
+int state = 0; //0 = title screen, 1 = game, 2 = end screen
 bool gameRunning = true;
 Uint64 currentTick = SDL_GetPerformanceCounter();
 Uint64 lastTick = 0;
 double deltaTime = 0; 
 
 
-float spawnRate = 3;
+float spawnRate = 2;
 float timeSinceLastSpawn = 0;
 uint64_t score = 0;
 uint64_t highscore;
@@ -56,6 +69,7 @@ uint64_t highscore;
 
 SDL_Event event;
 bool isHovered = false;
+bool isHovered2 = false;
 
 Player player(640, 360, playerTex);
 Ezreal e(ezrealSprite, player);
@@ -80,7 +94,6 @@ bool checkCollisions(Player player, Ezreal e) {
 	const SDL_Rect rectB = e.getCollisionBox();
 
 	if(SDL_HasIntersection(&rectA, &rectB) == SDL_TRUE) {
-		player.setDeath(true);
 		return true;
 	}
 
@@ -90,20 +103,44 @@ bool checkCollisions(Player player, Ezreal e) {
 
 void titleScreen() {
 
+	lastTick = currentTick;
+	currentTick = SDL_GetPerformanceCounter();
+	deltaTime = (double)((currentTick - lastTick)*1000 / (double)SDL_GetPerformanceFrequency() );
+
 	while (SDL_PollEvent(&event))
 	{
+
 		if (event.type == SDL_QUIT)
 			gameRunning = false;
+
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+		if( x >= 479 && x <= 1280 - 479 && y >= 319 && y <= 720 - 237 ) {
+			isHovered = true;
+
+			if(event.type == SDL_MOUSEBUTTONDOWN) {
+				if(event.button.button == SDL_BUTTON_LEFT) {
+					state = 1;
+					window.clear();
+				}
+			}
+		}
+		else isHovered = false;
+
 	}
 
 
+	window.render(titleScreenBg);
+	window.renderCenterX(150, DODGE_TEXT, NULL,  false);
+	window.renderCenterX(320, playButton, playButtonHovered, isHovered);
 
+	char highscore_text[100];
+	std::string highscore_str = std::to_string(highscore);
+	strcpy(highscore_text, "High Score: ");
+	strcat(highscore_text, highscore_str.c_str());
+	window.renderCenterX(550, highscore_text, endScreen44, white, false);
 
-}
-
-void endScreen() {
-
-	
+	window.display();
 
 }
 
@@ -131,18 +168,35 @@ void update() {
 		if(state == 2) {
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			if( x >= 567 && x <= 716 && y >= 620 && y <= 667 ) {
+
+			if( x >= 490 && x <= 578 && y >= 360 && y <= 448 ) {
 				isHovered = true;
 
 				if(event.type == SDL_MOUSEBUTTONDOWN) {
 					if(event.button.button == SDL_BUTTON_LEFT) {
 						score = 0;
+						player.setPos(640, 360);
 						state = 1;
 						window.clear();
 					}
 				}
 			}
 			else isHovered = false;
+
+			if( x >= 705 && x <= 793 && y >= 360 && y <= 448 ) {
+				isHovered2 = true;
+
+				if(event.type == SDL_MOUSEBUTTONDOWN) {
+					if(event.button.button == SDL_BUTTON_LEFT) {
+						score = 0;
+						player.setPos(640, 360);
+						state = 0;
+						window.clear();
+					}
+				}
+			}
+			else isHovered2 = false;
+
 		}
 
 	}
@@ -166,8 +220,8 @@ void update() {
 			timeSinceLastSpawn = 0.0f;
 
             spawnRate -= 15 * deltaTime;
-            if (spawnRate < 1.0f) {
-                spawnRate = 1.0f;
+            if (spawnRate < 0.5f) {
+                spawnRate = 0.5f;
             }
 
 		}
@@ -177,7 +231,7 @@ void update() {
 			ezreals[i].move(player, deltaTime);
 			if( checkCollisions(player, ezreals[i]) ) {
 				killer = "Ezreal's ult";
-				spawnRate = 3;
+				spawnRate = 2;
 				ezreals.clear();
 				state = 2;
 				window.clear();
@@ -192,12 +246,6 @@ void update() {
         }
 
 		player.move(deltaTime);
-
-	}
-
-	if(state == 2) {
-
-		endScreen();
 
 	}
 
@@ -225,26 +273,26 @@ void graphics() {
 
 		window.render(endScreenBg);
 
-		window.renderCenterX(400, 150, "Game Over", endScreen90, blue, false);
-
 		char joke[100];
 		strcpy(joke, "Bro tried to checkvar with ");
 		strcat(joke, killer);
-		window.renderCenterX(470, 240, joke, endScreen18, blue, false);
+		window.renderCenterX(180, joke, bernhard20, white, false);
 
 		char score_text[100];
 		std::string score_str = std::to_string(score);
-		strcpy(score_text, "Your score: ");
+		strcpy(score_text, "Your Score: ");
 		strcat(score_text, score_str.c_str());
-		window.renderCenterX(570, 440, score_text, endScreen22, blue, false);
+		window.renderCenterX(270, score_text, bernhard30, white, false);
 
 		char highscore_text[100];
 		std::string highscore_str = std::to_string(highscore);
-		strcpy(highscore_text, "High score: ");
+		strcpy(highscore_text, "High Score: ");
 		strcat(highscore_text, highscore_str.c_str());
-		window.renderCenterX(570, 510, highscore_text, endScreen22, blue, false);
+		window.renderCenterX(540, highscore_text, bernhard30, white, false);
 
-		window.renderCenterX(570, 640, "RePlay", endScreen44, green, isHovered);
+		window.render(490, 360, replayButton, replayButtonHovered, isHovered);
+		window.render(705, 360, homeButton, homeButtonHovered, isHovered2);
+
 		window.display();
 
 	}

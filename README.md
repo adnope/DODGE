@@ -7,13 +7,13 @@ DODGE is a game created for my university project using C++ and [SDL2](https://w
 ![]()
 
 ## Background
-DODGE is a game where you, as the player, try to dodge as much comets, bullets and projectiles as possible.
-The game gets harder the more you are into it, with the objects spawning more and more.
+DODGE is a game where you, as the player, try to dodge as much projectiles as possible.
+The game gets harder the more you are into it, with the projectiles spawning more and more.
 The player uses ``right-click`` to move the character, and dies when hit by a SINGLE object.
 
 ## Features
-1. Three different types of projectiles with different speed.
-2. Player's spell including ``Flash`` and ``Ghost``.
+1. Two types of projectiles with different speed.
+2. Player's spells including ``Flash`` and ``Ghost``.
 3. Highscore system.
 
 ## Prerequisites
@@ -37,3 +37,7 @@ make run
 This command compiles and create the ``.exe`` executable located in ``/bin`` and launch it right after.
 ### Linux
 DODGE is currently only available on Windows. I will try to bring it to Linux in the future.
+
+## Future Intentions
+- New projectiles, different properties.
+- More characters and skins.

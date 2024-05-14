@@ -103,6 +103,50 @@ void RenderWindow::render(Ezreal e, double deltaTime) {
 
 }
 
+void RenderWindow::render(float p_x, float p_y, SDL_Texture* tex, SDL_Texture* tex_hovered, bool isHovered) {
+
+    int width, height;
+    if(!isHovered) {
+        SDL_QueryTexture(tex, NULL, NULL, &width, &height);
+
+        SDL_Rect src;
+        src.x = 0;
+        src.y = 0;
+        src.w = width;
+        src.h = height;
+
+        SDL_Rect dst;
+        dst.x = p_x;
+        dst.y = p_y;
+        dst.w = src.w;
+        dst.h = src.h;
+
+        SDL_RenderCopy(renderer, tex, &src, &dst);
+
+    }
+
+    if(isHovered) {
+        SDL_QueryTexture(tex_hovered, NULL, NULL, &width, &height);
+
+        SDL_Rect src;
+        src.x = 0;
+        src.y = 0;
+        src.w = width;
+        src.h = height;
+
+        SDL_Rect dst;
+        dst.x = p_x;
+        dst.y = p_y;
+        dst.w = src.w;
+        dst.h = src.h;
+
+        SDL_RenderCopy(renderer, tex_hovered, &src, &dst);
+        
+    }
+
+}
+
+
 void RenderWindow::render(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor, bool isHovered)
 {
     
@@ -135,7 +179,7 @@ void RenderWindow::render(float p_x, float p_y, const char* p_text, TTF_Font* fo
 
 }
 
-void RenderWindow::renderCenterX(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor, bool isHovered)
+void RenderWindow::renderCenterX(float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor, bool isHovered)
 {
     
 		SDL_Surface* surfaceMessage = TTF_RenderText_Blended( font, p_text, textColor);
@@ -164,5 +208,48 @@ void RenderWindow::renderCenterX(float p_x, float p_y, const char* p_text, TTF_F
 		SDL_RenderCopy(renderer, message, &src, &dst);
 		SDL_FreeSurface(surfaceMessage);
 		SDL_DestroyTexture(message);
+
+}
+
+void RenderWindow::renderCenterX(float p_y, SDL_Texture* tex, SDL_Texture* tex_hovered, bool isHovered) {
+
+    int width, height;
+    if(!isHovered) {
+        SDL_QueryTexture(tex, NULL, NULL, &width, &height);
+
+        SDL_Rect src;
+        src.x = 0;
+        src.y = 0;
+        src.w = width;
+        src.h = height;
+
+        SDL_Rect dst;
+        dst.x = 1280/2 - src.w/2;
+        dst.y = p_y;
+        dst.w = src.w;
+        dst.h = src.h;
+
+        SDL_RenderCopy(renderer, tex, &src, &dst);
+
+    }
+
+    if(isHovered) {
+        SDL_QueryTexture(tex_hovered, NULL, NULL, &width, &height);
+
+        SDL_Rect src;
+        src.x = 0;
+        src.y = 0;
+        src.w = width;
+        src.h = height;
+
+        SDL_Rect dst;
+        dst.x = 1280/2 - src.w/2;
+        dst.y = p_y;
+        dst.w = src.w;
+        dst.h = src.h;
+
+        SDL_RenderCopy(renderer, tex_hovered, &src, &dst);
+        
+    }
 
 }
