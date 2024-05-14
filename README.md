@@ -25,19 +25,13 @@ The player uses ``right-click`` to move the character, and dies when hit by a SI
 
 ## Compiling
 ### Windows
-After installing all the dependencies, execute the following command in the project's directory:
+After installing all the dependencies, execute the following command in the project's directory to build and launch the game:
 ```
-g++ -std=c++20 -Wall -I"include" -I"include/sdl2" -I"include/headers" src/*.cpp -o bin/game.exe -L"lib" -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
 
-```
-The compiled ``.exe`` is located in ``./bin``. For it to run, you must copy the ``./res`` folder as well as all ``.dll`` files from your SDL installation to its directory.
-
-Or instead, execute this command in terminal inside the game's directory:
-```
 make run
 
 ```
-This command compiles and create the ``.exe`` executable located in ``/bin`` and launch it right after.
+
 ### Linux
 DODGE is currently only available on Windows. I will try to bring it to Linux in the future.
 
