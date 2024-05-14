@@ -2,9 +2,12 @@
 DODGE is a game created for my university project using C++ and [SDL2](https://www.libsdl.org/).
 
 ## Screenshots
-![]() 
 
-![]()
+![](https://i.imgur.com/mkJ3TQ3.png)
+
+![](https://i.imgur.com/sV9HUH8.png) 
+
+![](https://i.imgur.com/27G0wRx.png)
 
 ## Background
 DODGE is a game where you, as the player, try to dodge as much projectiles as possible.
