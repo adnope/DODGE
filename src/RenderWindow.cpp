@@ -13,6 +13,7 @@ RenderWindow::RenderWindow(const char* title, int _w, int _h) : window(NULL), re
 	}
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
 }
 
@@ -86,14 +87,10 @@ void RenderWindow::render(SDL_Texture* tex) {
 
 void RenderWindow::render(Ezreal e, double deltaTime) {
 
-    e.updateClip(deltaTime);
-    int i = e.getCurrentFrame();
-    SDL_Rect srcRect = e.clips[i];
-
-    // static int count = 0;
-    // std::vector<SDL_Rect> clips = e.clips;
-    // SDL_Rect srcRect = clips[count / 250];
-    // count++; if(count >= 1000) count = 0;
+    static int count = 0;
+    std::vector<SDL_Rect> clips = e.clips;
+    SDL_Rect srcRect = clips[count / 20];
+    count++; if(count >= 80) count = 0;
 
     SDL_Rect destRect;
 
@@ -103,5 +100,69 @@ void RenderWindow::render(Ezreal e, double deltaTime) {
     destRect.h = e.getHeight();
 
     SDL_RenderCopyEx(renderer, e.getSprite(), &srcRect, &destRect, e.getAngle(), NULL, SDL_FLIP_NONE);
+
+}
+
+void RenderWindow::render(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor, bool isHovered)
+{
+    
+		SDL_Surface* surfaceMessage = TTF_RenderText_Blended( font, p_text, textColor);
+		SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+
+		SDL_Rect src;
+		src.x = 0;
+		src.y = 0;
+		src.w = surfaceMessage->w;
+		src.h = surfaceMessage->h;
+
+		SDL_Rect dst;
+        if(isHovered) {
+            dst.x = p_x - 10;
+            dst.y = p_y - 5;
+            dst.w = src.w + 20;
+            dst.h = src.h + 10;
+        } 
+		else {
+            dst.x = p_x;
+            dst.y = p_y;
+            dst.w = src.w;
+            dst.h = src.h;
+        }
+
+		SDL_RenderCopy(renderer, message, &src, &dst);
+		SDL_FreeSurface(surfaceMessage);
+	 	SDL_DestroyTexture(message);
+
+}
+
+void RenderWindow::renderCenterX(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor, bool isHovered)
+{
+    
+		SDL_Surface* surfaceMessage = TTF_RenderText_Blended( font, p_text, textColor);
+		SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+
+		SDL_Rect src;
+		src.x = 0;
+		src.y = 0;
+		src.w = surfaceMessage->w;
+		src.h = surfaceMessage->h; 
+
+		SDL_Rect dst;
+        if(isHovered) {
+            dst.x = 1280/2 - src.w/2 - 10;
+            dst.y = p_y - 5;
+            dst.w = src.w + 20;
+            dst.h = src.h + 10;
+        }
+		else {
+            dst.x = 1280/2 - src.w/2;
+            dst.y = p_y;
+            dst.w = src.w;
+            dst.h = src.h;
+        }
+
+		SDL_RenderCopy(renderer, message, &src, &dst);
+		SDL_FreeSurface(surfaceMessage);
+		SDL_DestroyTexture(message);
 
 }

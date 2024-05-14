@@ -7,7 +7,7 @@ cxxflags = -std=c++20 -Wall -I"include" -I"include/sdl2" -I"include/headers"
 
 # libs
 libpath = -L"lib"
-libs = -l"mingw32" -l"SDL2main" -l"SDL2" -l"SDL2_image"
+libs = -l"mingw32" -l"SDL2main" -l"SDL2" -l"SDL2_image" -l"SDL2_ttf"
 
 # src & output
 src = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)

@@ -19,7 +19,7 @@ protected:
     float dx, dy;
     float speed;
     int width, height;
-
+    
 public:
 
     SDL_Texture* getSprite() {
@@ -52,10 +52,11 @@ public:
 
 class Ezreal : public Projectiles{
 private:
-    double frameTimer;
-    int currentFrame = 0;
+    SDL_Rect collisionBox;
 
 public:
+
+    SDL_Rect getCollisionBox() { return collisionBox; }
 
     bool isDead = false;
 
@@ -77,34 +78,27 @@ public:
 
         spawn(player);
 
-    }
+        collisionBox.x = x - 18;
+        collisionBox.y = y - 20;
+        collisionBox.w = 36;
+        collisionBox.h = 39;
 
-    void updateClip(double deltaTime) {
-
-        frameTimer += deltaTime;
-
-        if(frameTimer >= 0.033) {
-            currentFrame++;
-            frameTimer = 0;
-        }
-
-        if(currentFrame >= 4) currentFrame = 0;
-
-    }
-
-    int getCurrentFrame() {
-        return currentFrame;
     }
 
     void spawn(Player player) {
         
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution<float> distX(-1500, 1500);
-        std::uniform_real_distribution<float> distY(-1500, 1500);
+        std::uniform_real_distribution<float> distX(-160, 1440);
+        std::uniform_real_distribution<float> distY(-90, 810);
 
         x = distX(gen);
         y = distY(gen);
+
+        while(x>=0 && x <= 1280 && y >=0 && y <= 720) {
+            x = distX(gen);
+            y = distY(gen);
+        }
 
         dx = player.getX() - x;
         dy = player.getY() - y;
@@ -125,7 +119,13 @@ public:
         x += dx * speed * deltaTime * 1000;
         y += dy * speed * deltaTime * 1000;
 
-        if(x >= 2000 || y >= 2000 || x <= -2000 || y <= -2000) isDead = true; 
+        if(x >= 1800 || y >= 1013 || x <= -200 || y <= -113) isDead = true; 
+
+        collisionBox.x = x - 18;
+        collisionBox.y = y - 20;
+        collisionBox.w = 36;
+        collisionBox.h = 39;
+
 
     }
 

@@ -7,10 +7,13 @@
 
 #include<cmath>
 #include<iostream>
+#include<vector>
 
 class Player{
 private:
 
+    bool dead;
+    SDL_Rect collisionBox;
     float angle;
     float x;
     float y;
@@ -39,18 +42,28 @@ public:
 
         tex = _tex;
 
+        collisionBox.x = x - 25 + 6;
+        collisionBox.y = y - 25 + 6;
+        collisionBox.h = 38;
+        collisionBox.w = 41;
+        
     }
 
     SDL_Texture* getTex() { return tex; }
-
     float getX() const { return x; }
     float getY() const { return y; }
-    void setPos(float _x, float _y) { x = _x; y = _y; }
-
     int getWidth() const { return width; }
     int getHeight() const { return height; }
-
     float getAngle() const { return angle; }
+    SDL_Rect getCollisionBox() { return collisionBox; }
+    
+    bool isDead() {
+        return dead;
+    }
+
+    void setDeath(bool b) {
+        dead = b;
+    }
 
     void takeMouseInput() {
 
@@ -88,6 +101,11 @@ public:
             y = destY;
         }
         
+        collisionBox.x = x - 25 + 6;
+        collisionBox.y = y - 25 + 6;
+        collisionBox.h = 38;
+        collisionBox.w = 41;
+
     }
 
 };
