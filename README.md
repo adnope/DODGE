@@ -15,8 +15,8 @@ The game gets harder the more you are into it, with the projectiles spawning mor
 The player uses ``right-click`` to move the character, and dies when hit by a SINGLE object.
 
 ## Features
-1. Two types of projectiles with different speed.
-2. Player's spells including ``Flash`` and ``Ghost``.
+1. Two types of projectiles with different speed (currently having only one type).
+2. Player's spells including ``Flash`` and ``Ghost`` (currently not available).
 3. Highscore system.
 
 ## Prerequisites
